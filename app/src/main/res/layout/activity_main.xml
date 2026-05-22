@@ -87,7 +87,7 @@
                 android:text="Kilo: $20"/>
 
             <Button
-                android:id="@+id/btnManzana"
+                android:id="@+id/btnManzanaRoja"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar al carrito"
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leche"
+                android:text="Leche Aplura 1l"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"/>
@@ -126,7 +126,7 @@
                 android:text="Precio Litro: $30"/>
 
             <Button
-                android:id="@+id/btnLeche"
+                android:id="@+id/btnLecheAlpura"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar al carrito"
@@ -165,7 +165,7 @@
                 android:text="Kilo: $25"/>
 
             <Button
-                android:id="@+id/btnManzana"
+                android:id="@+id/btnManzanaVerde"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar al carrito"
@@ -187,13 +187,13 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/CocaCola_600"
+                android:src="@drawable/refresco_coca_600"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manzana Roja"
+                android:text="Refresco Coca Cola 600ml"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"/>
@@ -204,7 +204,7 @@
                 android:text="Precio unitario: $24"/>
 
             <Button
-                android:id="@+id/btnManzana"
+                android:id="@+id/btnRefrescoCoca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar al carrito"
