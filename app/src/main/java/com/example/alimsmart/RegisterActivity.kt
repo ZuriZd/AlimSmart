@@ -11,6 +11,8 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var etPassword: EditText
     lateinit var btnRegistrar: Button
 
+    lateinit var tvVolverLogin: TextView
+
     lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +22,7 @@ class RegisterActivity : AppCompatActivity() {
         etCorreo = findViewById(R.id.etCorreo)
         etPassword = findViewById(R.id.etPassword)
         btnRegistrar = findViewById(R.id.btnRegistrar)
+        tvVolverLogin = findViewById(R.id.tvVolverLogin)
 
         dbHelper = DatabaseHelper(this)
 
@@ -56,6 +59,10 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+
+        tvVolverLogin.setOnClickListener {
+            finish()
+        }
 
     }
 }
