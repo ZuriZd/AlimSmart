@@ -40,6 +40,13 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
+                // Abrir la pantalla principal (MainActivity)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+
+                // Cerrar la LoginActivity para que el usuario no regrese al login al presionar el botón "Atrás"
+                finish()
+
             } else {
 
                 Toast.makeText(

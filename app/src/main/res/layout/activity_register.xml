@@ -43,4 +43,14 @@
         android:textColor="#FFFFFF"
         android:layout_marginTop="25dp"/>
 
+    <Button
+        android:id="@+id/tvVolverLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regresar"
+        android:backgroundTint="#FF0000"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
 </LinearLayout>

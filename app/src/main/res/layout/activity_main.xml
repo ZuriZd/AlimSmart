@@ -1,218 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation">
 
-        <!-- Logo -->
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/alimsmart_logo"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"/>
-
-        <!-- Buscador -->
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Buscar productos..."
-            android:padding="12dp"/>
-
-        <!-- Categorías -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Categorías"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Frutas"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lácteos"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bebidas"/>
-        </LinearLayout>
-
-        <!-- PRODUCTO 1 -->
         <LinearLayout
             android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="4dp"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/manzana_roja"
-                android:layout_gravity="center"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/alimsmart_logo"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manzana Roja"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kilo: $20"/>
-
-            <Button
-                android:id="@+id/btnManzanaRoja"
+            <EditText
+                android:id="@+id/etBuscador"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Agregar al carrito"
-                android:backgroundTint="#43A047"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="10dp"/>
-        </LinearLayout>
-
-        <!-- PRODUCTO 2 -->
-        <LinearLayout
-            android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/Leche_Alpura_1l"
-                android:layout_gravity="center"/>
+                android:hint="Buscar productos..."
+                android:padding="12dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leche Aplura 1l"
-                android:textSize="20sp"
+                android:text="Categorías"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="20dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Precio Litro: $30"/>
-
-            <Button
-                android:id="@+id/btnLecheAlpura"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Agregar al carrito"
-                android:backgroundTint="#43A047"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="10dp"/>
-        </LinearLayout>
+                android:layout_marginTop="10dp">
 
-        <!-- PRODUCTO 3 -->
-        <LinearLayout
-            android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnCatFrutas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Frutas"/>
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/manzana_verde"
-                android:layout_gravity="center"/>
+                <Button
+                    android:id="@+id/btnCatLacteos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lácteos"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manzana Roja"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
+                <Button
+                    android:id="@+id/btnCatBebidas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bebidas"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kilo: $25"/>
-
-            <Button
-                android:id="@+id/btnManzanaVerde"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProductos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Agregar al carrito"
-                android:backgroundTint="#43A047"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp"/>
+
         </LinearLayout>
+    </ScrollView>
 
-        <!-- PRODUCTO 4 -->
-        <LinearLayout
-            android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:elevation="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:menu="@menu/navegador_inferior_menu" />
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/refresco_coca_600"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Refresco Coca Cola 600ml"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Precio unitario: $24"/>
-
-            <Button
-                android:id="@+id/btnRefrescoCoca"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Agregar al carrito"
-                android:backgroundTint="#43A047"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="10dp"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>
