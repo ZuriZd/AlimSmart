@@ -7,37 +7,52 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * Esta clase gestiona el mapeo de variables globales de sesión
+ */
 class PerfilActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_perfil) // <-- Primero se dibuja la vista
+        setContentView(R.layout.activity_perfil)
 
+        //Oculta la ActionBar
         supportActionBar?.hide()
 
-        // 1. Buscamos las casillas del XML por su ID exacto
+        // Vinculación manual de los componentes visuales definidos en el Layout
         val tvVolverPerfil = findViewById<TextView>(R.id.tvVolverPerfil)
         val tvNombrePerfil = findViewById<TextView>(R.id.tvNombrePerfil)
         val tvCorreoPerfil = findViewById<TextView>(R.id.tvCorreoPerfil)
         val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
 
-        // 2. ESTA ES LA PARTE CLAVE: Aquí le ordenamos a Kotlin cambiar el texto del XML
+        //Mapea los valores resguardados en el SessionManager.
+        // Se aplica el operador Elvis (?:) para asignar textos de auxilio si la memoria llega vacía.
         tvNombrePerfil.text = SessionManager.nombreUsuario ?: "Invitado"
         tvCorreoPerfil.text = SessionManager.correoUsuario ?: "sin_correo@alimsmart.com"
 
-        // Botón volver
+        //Si el usario quiere regresar entonces cierra el ciclo de vida de la Activity actual (destruye la vista)
+        // y regresa automáticamente al plano anterior en segundo plano
         tvVolverPerfil.setOnClickListener {
             finish()
         }
 
-        // Botón cerrar sesión
+        // Evento Click - Cierre Seguro de Sesión
         btnCerrarSesion.setOnClickListener {
             Toast.makeText(this, "Sesión finalizada", Toast.LENGTH_SHORT).show()
+
+            //Elimina los datos del usuario de la sesión actual
             SessionManager.limpiarSesion()
+
+            // Transición y Limpieza del Backstack (Pila de Actividades):
             val intent = Intent(this, LoginActivity::class.java)
+
+            // Estos flags de seguriodad borran por completo el historial de pantallas abiertas.
+            // Si el usuario presiona el botón físico de retroceso del teléfono, el sistema operativo
+            // cerrará la aplicación en lugar de permitirle reingresar a la tienda sin contraseña.
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             startActivity(intent)
-            finish()
+            finish() // Destruye la pantalla de perfil actual
         }
     }
 }
