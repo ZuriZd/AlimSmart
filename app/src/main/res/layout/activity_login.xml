@@ -44,6 +44,14 @@
         android:textColor="#FFFFFF"
         android:layout_marginTop="25dp"/>
 
+    <Button
+        android:id="@+id/btnInvitado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continuar como Invitado"
+        android:backgroundTint="#757575"
+        android:layout_marginTop="8dp"/>
+
     <TextView
         android:id="@+id/tvRegistro"
         android:layout_width="wrap_content"

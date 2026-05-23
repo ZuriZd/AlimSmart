@@ -22,15 +22,20 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
      * solicita acceso a la base de datos. Construye el esquema relacional de las tablas.
      */
     override fun onCreate(db: SQLiteDatabase?) {
-        // Creación de la tabla 'usuarios' con llave primaria autoincremental
+        // Creación de las tablas principales
         // Itente moverlo a dos lineas diferentes pero solo no me dejaba y se rompia, entonces se queda asi
         val createTable = "CREATE TABLE usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, usuario TEXT, correo TEXT, password TEXT)"
         db?.execSQL(createTable)
+
+        // Almacena las tarjetas vinculadas a cada cuenta de usuario
+        val createTableTarjetas = "CREATE TABLE tarjetas (id INTEGER PRIMARY KEY AUTOINCREMENT, usuario TEXT, numero TEXT, titular TEXT)"
+        db?.execSQL(createTableTarjetas)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Lógica de migración: Se eliminaría la tabla vieja y se llamaría a onCreate nuevamente
         db?.execSQL("DROP TABLE IF EXISTS usuarios")
+        db?.execSQL("DROP TABLE IF EXISTS tarjetas")
         onCreate(db)
     }
 
@@ -47,6 +52,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         // Retorna true si la inserción fue exitosa (ID de fila válido)
         return db.insert("usuarios", null, values) != -1L
+    }
+
+    /**
+     * Aqui se registra una nueva tarjeta bancaria asociada al usuario activo!
+     */
+    fun insertarTarjeta(usuario: String, numero: String, titular: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("usuario", usuario)
+            put("numero", numero) // Guardará los últimos 4 dígitos o el número enmascarado
+            put("titular", titular)
+        }
+        return db.insert("tarjetas", null, values) != -1L
     }
 
     /**
@@ -79,4 +97,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close() // Siempre cerramos el cursor para liberar memoria
         return correo
     }
+
+    /**
+     * Este so ocupa para recupera todas las tarjetas registradas por un usuario específico.
+     * @return Lista de cadenas de texto con el formato "Visa/Mastercard terminada en XXXX".
+     */
+    fun obtenerTarjetasUsuario(usuario: String): List<String> {
+        val lista = mutableListOf<String>()
+        val db = this.readableDatabase
+
+        // Consultamos las tarjetas que pertenezcan rigurosamente al usuario en sesión
+        val cursor = db.rawQuery("SELECT numero FROM tarjetas WHERE usuario = ?", arrayOf(usuario))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val numero = cursor.getString(0)
+                // Tomamos solo los últimos 4 dígitos para simular una seguridad bien chida
+                val terminacion = if (numero.length >= 4) numero.substring(numero.length - 4) else numero
+                lista.add("Tarjeta terminada en •••• $terminacion")
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return lista
+    }
+
 }
+
+//Taco taco chimichanga!

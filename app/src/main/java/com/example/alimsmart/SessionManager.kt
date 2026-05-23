@@ -9,6 +9,7 @@ object SessionManager {
     // Variables globales que resguardan la sesión actual del usuario activo
     var nombreUsuario: String? = null
     var correoUsuario: String? = null
+    var esInvitado: Boolean = false
 
     /**
      * Almacena las credenciales validadas del usuario tras un inicio de sesión exitoso.
@@ -18,7 +19,15 @@ object SessionManager {
     fun guardarSesion(nombre: String, correo: String) {
         nombreUsuario = nombre
         correoUsuario = correo
+        esInvitado = false
     }
+
+    fun iniciarSesionInvitado() {
+        nombreUsuario = "Invitado"
+        correoUsuario = "sin_cuenta@alimsmart.com"
+        esInvitado = true // Marcamos que entró sin registrarse
+    }
+
 
     /**
      * Remueve las referencias de datos de la memoria caché al cerrar sesión.
@@ -27,5 +36,6 @@ object SessionManager {
     fun limpiarSesion() {
         nombreUsuario = null
         correoUsuario = null
+        esInvitado = false
     }
 }
