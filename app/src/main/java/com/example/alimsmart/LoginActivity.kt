@@ -23,10 +23,21 @@ class LoginActivity : AppCompatActivity() {
         tvRegistro = findViewById(R.id.tvRegistro)
         dbHelper = DatabaseHelper(this)
 
+        val btnInvitado = findViewById<Button>(R.id.btnInvitado)
+
+        btnInvitado.setOnClickListener {
+            // Guardamos la sesión como invitado y saltamos al catálogo
+            SessionManager.iniciarSesionInvitado()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         btnLogin.setOnClickListener {
             val usuario = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val usuarioValido = dbHelper.validarUsuario(usuario, password)
+
 
             if (usuarioValido) {
                 val correoReal = dbHelper.obtenerCorreoUsuario(usuario)

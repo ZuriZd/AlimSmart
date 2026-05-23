@@ -24,6 +24,25 @@ class PerfilActivity : AppCompatActivity() {
         val tvNombrePerfil = findViewById<TextView>(R.id.tvNombrePerfil)
         val tvCorreoPerfil = findViewById<TextView>(R.id.tvCorreoPerfil)
         val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
+        val btnAgregarTarjeta = findViewById<Button>(R.id.btnAgregarTarjeta)
+        val btnVerCupones = findViewById<Button>(R.id.btnVerCupones)
+        val dbHelper = DatabaseHelper(this)
+
+        // REGLA DE NEGOCIO: Si es invitado, ocultamos sus privilegios
+        if (SessionManager.esInvitado) {
+            btnAgregarTarjeta.visibility = android.view.View.GONE
+            btnVerCupones.visibility = android.view.View.GONE
+        }
+
+        btnVerCupones.setOnClickListener {
+            val nombres = CuponManager.listaCupones.joinToString("\n\n") { "${it.nombre}" }
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Tus Cupones Disponibles")
+                .setMessage(nombres)
+                .setPositiveButton("¡Genial!", null)
+                .show()
+        }
+
 
         //Mapea los valores resguardados en el SessionManager.
         // Se aplica el operador Elvis (?:) para asignar textos de auxilio si la memoria llega vacía.
@@ -53,6 +72,43 @@ class PerfilActivity : AppCompatActivity() {
 
             startActivity(intent)
             finish() // Destruye la pantalla de perfil actual
+        }
+
+        btnAgregarTarjeta.setOnClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+            builder.setTitle("Registrar Nueva Tarjeta")
+
+            val layoutInput = android.widget.LinearLayout(this).apply {
+                orientation = android.widget.LinearLayout.VERTICAL
+                setPadding(50, 40, 50, 10)
+            }
+
+            val etNumero = android.widget.EditText(this).apply { hint = "Número de Tarjeta (16 dígitos)" }
+            val etTitular = android.widget.EditText(this).apply { hint = "Nombre del Titular" }
+
+            layoutInput.addView(etNumero)
+            layoutInput.addView(etTitular)
+            builder.setView(layoutInput)
+
+            // Configuración de acciones del diálogo de registro
+            builder.setPositiveButton("Guardar") { dialog, _ ->
+                val numero = etNumero.text.toString().trim()
+                val titular = etTitular.text.toString().trim()
+                val usuarioActivo = SessionManager.nombreUsuario ?: "Invitado"
+
+                if (numero.isEmpty() || titular.isEmpty()) {
+                    Toast.makeText(this, "Campos incompletos. No se guardó.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Guardamos la tarjeta vinculada al usuario en SQLite
+                    val exito = dbHelper.insertarTarjeta(usuarioActivo, numero, titular)
+                    if (exito) {
+                        Toast.makeText(this, "Tarjeta registrada con éxito", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                dialog.dismiss()
+            }
+            builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
+            builder.show()
         }
     }
 }
