@@ -1,33 +1,31 @@
 package com.example.alimsmart
 
 object CarritoManager {
+    private val listaCarrito = mutableListOf<Producto>()
 
-    // Una lista mutable (que puede cambiar) privada para guardar los productos
-    private val productosEnCarrito = mutableListOf<Producto>()
-
-    // Función para añadir un producto
     fun agregarProducto(producto: Producto) {
-        productosEnCarrito.add(producto)
+        listaCarrito.add(producto)
     }
 
-    // Función para quitar un producto
-    fun eliminarProducto(producto: Producto) {
-        productosEnCarrito.remove(producto)
+    fun obtenerCarrito(): List<Producto> {
+        return listaCarrito
     }
 
-    // Función para leer qué hay en el carrito
-    fun obtenerProductos(): List<Producto> {
-        return productosEnCarrito
-    }
-
-    // Función súper útil de Kotlin que suma automáticamente todos los precios
-    fun calcularTotal(): Double {
-        return productosEnCarrito.sumOf { it.precio }
-    }
-
-    // Para vaciar el carrito después de pagar
     fun limpiarCarrito() {
-        productosEnCarrito.clear()
+        listaCarrito.clear()
+    }
 
+    // LA NUEVA FUNCIÓN
+    fun eliminarProducto(producto: Producto) {
+        listaCarrito.remove(producto)
+    }
+
+    // NUEVA FUNCIÓN: Suma todos los precios automáticamente
+    fun calcularTotal(): Double {
+        var total = 0.0
+        for (producto in listaCarrito) {
+            total += (producto.precio * producto.cantidad)
+        }
+        return total
     }
 }
