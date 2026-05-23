@@ -40,22 +40,37 @@
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <HorizontalScrollView
+                android:id="@+id/scrollCategorias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_below="@id/etBuscador" android:layout_marginBottom="16dp"
+                android:scrollbars="none"> <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp">
+
+                <Button
+                    android:id="@+id/btnCatTodos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Todos"/>
 
                 <Button
                     android:id="@+id/btnCatFrutas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="Frutas"/>
 
                 <Button
                     android:id="@+id/btnCatLacteos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="Lácteos"/>
 
                 <Button
@@ -63,7 +78,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bebidas"/>
+
             </LinearLayout>
+            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProductos"

@@ -13,6 +13,7 @@ class DatabaseHelper(context: Context) :
         val createTable = """
             CREATE TABLE usuarios(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                usuario TEXT,
                 correo TEXT,
                 password TEXT
             )
@@ -33,16 +34,11 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    fun validarUsuario(correo: String, password: String): Boolean {
+    fun validarUsuario(usuario: String, password: String): Boolean {
 
         val db = readableDatabase
 
-        val query = """
-            SELECT * FROM usuarios
-            WHERE correo = ? AND password = ?
-        """
-
-        val cursor = db.rawQuery(query, arrayOf(correo, password))
+        val cursor = db.rawQuery("SELECT * FROM usuarios WHERE usuario = ? AND password = ?", arrayOf(usuario, password))
 
         val existe = cursor.count > 0
 
@@ -51,12 +47,13 @@ class DatabaseHelper(context: Context) :
         return existe
     }
 
-    fun insertarUsuario(correo: String, password: String): Boolean {
+    fun insertarUsuario(usuario: String,correo: String, password: String): Boolean {
 
         val db = writableDatabase
 
         val values = ContentValues()
 
+        values.put("usuario", usuario)
         values.put("correo", correo)
         values.put("password", password)
 
@@ -64,4 +61,16 @@ class DatabaseHelper(context: Context) :
 
         return resultado != -1L
     }
+
+    fun obtenerCorreoUsuario(usuario: String): String {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT correo FROM usuarios WHERE usuario = ?", arrayOf(usuario))
+        var correo = "sin_correo@alimsmart.com"
+        if (cursor.moveToFirst()) {
+            correo = cursor.getString(0)
+        }
+        cursor.close()
+        return correo
+    }
+
 }

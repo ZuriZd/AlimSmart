@@ -34,7 +34,7 @@ class ProductoAdapter(
 
         holder.tvNombreProducto.text = producto.nombre
         holder.tvPrecioProducto.text = "$${producto.precio}"
-        holder.ivImagenProducto.setImageResource(producto.imagenResId)
+        holder.ivImagenProducto.setImageResource(producto.imagen)
 
         // MAGIA VISUAL: Si es el carrito, reciclamos el botón para que sea de eliminar
         if (esCarrito) {
@@ -46,7 +46,7 @@ class ProductoAdapter(
                 // 1. Lo borramos de la memoria
                 CarritoManager.eliminarProducto(producto)
                 // 2. Actualizamos la lista visual
-                actualizarLista(CarritoManager.obtenerProductos())
+                actualizarLista(CarritoManager.obtenerCarrito())
                 // 3. Avisamos a la Activity para que recalcule el total
                 onCambioCarrito?.invoke()
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tvVolverPedidos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Volver  "
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#757575"
+            android:paddingEnd="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mis Pedidos"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvMensajePedidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aún no tienes pedidos recientes"
+        android:textSize="18sp"
+        android:textColor="#757575"
+        android:gravity="center"
+        android:layout_marginTop="64dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layoutContenedorPedidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
+
+</LinearLayout>

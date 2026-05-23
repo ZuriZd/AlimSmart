@@ -1,5 +1,6 @@
 package com.example.alimsmart
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -35,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         // 1. Inicializar los productos (Simulando lo que vendría de una base de datos)
         // Usamos los mismos nombres e imágenes que ya tenía el proyecto original
         listaCompletaProductos = listOf(
-            Producto(1, "Manzana Roja", 20.0, R.drawable.manzana_roja, "Frutas"),
-            Producto(2, "Leche Alpura 1l", 30.0, R.drawable.leche_alpura_1l, "Lácteos"),
-            Producto(3, "Manzana Verde", 25.0, R.drawable.manzana_verde, "Frutas"),
-            Producto(4, "Refresco Coca Cola 600ml", 24.0, R.drawable.refresco_coca_600, "Bebidas")
+            Producto(id = 1, nombre = "Manzana Roja", precio = 20.0, imagen = R.drawable.manzana_roja, categoria = "Frutas"),
+            Producto(id = 2, nombre = "Leche Alpura 1l", precio = 30.0, imagen = R.drawable.leche_alpura_1l, categoria = "Lácteos"),
+            Producto(id = 3, nombre = "Manzana Verde", precio = 25.0, imagen = R.drawable.manzana_verde, categoria = "Frutas"),
+            Producto(id = 4, nombre = "Refresco Coca Cola 600ml", precio = 24.0, imagen = R.drawable.refresco_coca_600, categoria = "Bebidas")
         )
 
         // 2. Vincular vistas de la pantalla principal
@@ -54,17 +56,24 @@ class MainActivity : AppCompatActivity() {
         rvProductos.adapter = productoAdapter
 
         // 4. Vincular los botones de categorías
+        val btnCatTodos = findViewById<Button>(R.id.btnCatTodos)
         val btnCatFrutas = findViewById<Button>(R.id.btnCatFrutas)
         val btnCatLacteos = findViewById<Button>(R.id.btnCatLacteos)
         val btnCatBebidas = findViewById<Button>(R.id.btnCatBebidas)
 
+
         // 5. LÓGICA DE FILTRADO POR CATEGORÍAS
-        // Filtramos la lista original en una sola línea y se la mandamos al adaptador
-        btnCatFrutas.setOnClickListener {
-            val listaFiltrada = listaCompletaProductos.filter { it.categoria == "Frutas" }
-            productoAdapter.actualizarLista(listaFiltrada)
+
+        btnCatTodos.setOnClickListener {
+            // Le devolvemos al adaptador la lista original sin filtros
+            productoAdapter.actualizarLista(listaCompletaProductos)
         }
 
+        // Filtramos la lista original en una sola línea y se la mandamos al adaptador
+        btnCatFrutas.setOnClickListener {
+            val filtrados = listaCompletaProductos.filter { it.categoria == "Frutas" } // Ajusta según tu lógica
+            productoAdapter.actualizarLista(filtrados)
+        }
         btnCatLacteos.setOnClickListener {
             val listaFiltrada = listaCompletaProductos.filter { it.categoria == "Lácteos" }
             productoAdapter.actualizarLista(listaFiltrada)
@@ -99,18 +108,23 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_inicio -> {
-                    // Aquí ya estamos en inicio, no hacemos nada o recargamos la lista completa
                     productoAdapter.actualizarLista(listaCompletaProductos)
                     true
                 }
-                R.id.nav_categorias -> {
-                    android.widget.Toast.makeText(this, "Pantalla de Categorías en construcción", android.widget.Toast.LENGTH_SHORT).show()
+                // AH0RA ABRE EL CARRITO
+                R.id.nav_carrito -> {
+                    val intent = Intent(this, CarritoActivity::class.java)
+                    startActivity(intent)
                     true
                 }
-                // --- CAMBIO DENTRO DE bottomNavigation.setOnItemSelectedListener EN MainActivity.kt ---
+                // AHORA ABRE EL HISTORIAL DE PEDIDOS
                 R.id.nav_pedidos -> {
-                    // Cambiamos el Toast por un Intent real para abrir el carrito
-                    val intent = android.content.Intent(this, CarritoActivity::class.java)
+                    val intent = Intent(this, PedidosActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_perfil -> {
+                    val intent = Intent(this, PerfilActivity::class.java)
                     startActivity(intent)
                     true
                 }

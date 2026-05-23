@@ -15,6 +15,14 @@
         android:layout_marginBottom="25dp"/>
 
     <EditText
+        android:id="@+id/etNuevoUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inventa un nombre de usuario"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
         android:id="@+id/etCorreo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
