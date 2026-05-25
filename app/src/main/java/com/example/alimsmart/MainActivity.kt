@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio -> {
+                R.id.nav_home -> {
                     productoAdapter.actualizarLista(listaCompletaProductos)
                     true
                 }

@@ -3,60 +3,75 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:padding="16dp">
 
+    <!-- HEADER MODERNO -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:padding="8dp"
+        android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/tvVolver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="← Volver  "
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#757575"
-            android:paddingEnd="12dp"/>
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="4dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mi Carrito"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#2E7D32"/>
+            android:textColor="#2E7D32"
+            android:layout_marginStart="12dp"/>
     </LinearLayout>
 
+    <!-- LISTA -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCarrito"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/headerLayout"
         android:layout_above="@id/layoutTotal"
-        android:layout_marginBottom="16dp"/>
+        android:paddingBottom="80dp"/>
 
+    <!-- EMPTY STATE -->
+    <TextView
+        android:id="@+id/tvEmptyCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tu carrito está vacío"
+        android:textSize="18sp"
+        android:textColor="#9E9E9E"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <!-- TOTAL FLOATING CARD -->
     <LinearLayout
         android:id="@+id/layoutTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
+        android:layout_margin="12dp"
+        android:orientation="vertical"
         android:padding="16dp"
-        android:elevation="8dp">
+        android:background="@drawable/bg_total_card"
+        android:elevation="12dp">
 
         <TextView
             android:id="@+id/tvTotalPagar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Total: $0.0"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
             android:layout_marginBottom="12dp"/>
@@ -64,11 +79,11 @@
         <Button
             android:id="@+id/btnFinalizarCompra"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:text="Finalizar Compra"
-            android:backgroundTint="#43A047"
+            android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:backgroundTint="#2E7D32"/>
     </LinearLayout>
+
 </RelativeLayout>
