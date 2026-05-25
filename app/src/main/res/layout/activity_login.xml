@@ -1,71 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="30dp"
-    android:background="#F5F5F5"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login">
 
-    <ImageView
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:src="@drawable/alimsmart_logo"
-        android:layout_marginBottom="30dp"/>
-
-    <EditText
-        android:id="@+id/etEmail"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Usuario"
-        android:padding="16dp"
-        android:backgroundTint="#2E7D32"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="30dp">
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:padding="14dp"
-        android:backgroundTint="#2E7D32"
-        android:layout_marginTop="15dp"/>
+        <!-- Título -->
 
-    <Button
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido a AlimSmart"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#4A148C"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Subtítulo -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu compra inteligente comienza aquí"
+            android:textColor="#757575"
+            android:textSize="16sp"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- Tarjeta del logo -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="10dp"
+            android:layout_marginBottom="35dp">
+
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:src="@drawable/alimsmart_logo"
+                android:scaleType="fitCenter"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Usuario -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario"
+            app:startIconDrawable="@android:drawable/ic_menu_myplaces"
+            app:boxBackgroundMode="filled"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxCornerRadiusTopStart="18dp"
+            app:boxCornerRadiusTopEnd="18dp"
+            app:boxCornerRadiusBottomStart="18dp"
+            app:boxCornerRadiusBottomEnd="18dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Contraseña -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:layout_marginTop="18dp"
+            app:startIconDrawable="@android:drawable/ic_lock_lock"
+            app:endIconMode="password_toggle"
+            app:boxBackgroundMode="filled"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxCornerRadiusTopStart="18dp"
+            app:boxCornerRadiusTopEnd="18dp"
+            app:boxCornerRadiusBottomStart="18dp"
+            app:boxCornerRadiusBottomEnd="18dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón -->
+
+        <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
+        android:text="INICIAR SESIÓN"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:backgroundTint="#43A047"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="25dp"/>
+        android:backgroundTint="#66BB6A"
+        android:padding="16dp"
+        android:letterSpacing="0.05"
+        android:layout_marginTop="30dp"
+        app:cornerRadius="20dp"/>
 
-    <Button
-        android:id="@+id/btnInvitado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Continuar como Invitado"
-        android:backgroundTint="#757575"
-        android:layout_marginTop="8dp"/>
+        <!-- Registro -->
 
-    <TextView
-        android:id="@+id/tvRegistro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿No tienes cuenta? Regístrate"
-        android:textColor="#2E7D32"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/tvRegistro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear una cuenta nueva"
+            android:textColor="#2E7D32"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="40dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Compra fácil y rápida"
-        android:textColor="#757575"
-        android:layout_marginTop="20dp"/>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

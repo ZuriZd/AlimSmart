@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F7FAF7">
+
+    <!-- CONTENIDO -->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -13,84 +16,170 @@
         android:layout_above="@id/bottomNavigation">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/alimsmart_logo"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"/>
+            <!-- ENCABEZADO -->
 
-            <EditText
-                android:id="@+id/etBuscador"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Buscar productos..."
-                android:padding="12dp"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
+
+                <!-- LOGO -->
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/alimsmart_logo"/>
+
+                <!-- TEXTO -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="15dp">
+
+                    <TextView
+                        android:id="@+id/tvSaludo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hola, 👋"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#2E7D32"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Qué deseas comprar hoy?"
+                        android:textColor="#757575"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- BUSCADOR -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Buscar productos"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:boxBackgroundMode="filled"
+                app:boxBackgroundColor="#FFFFFF"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusBottomEnd="20dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBuscador"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- CATEGORÍAS -->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Categorías"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
+                android:textColor="#2E7D32"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="15dp"/>
 
             <HorizontalScrollView
                 android:id="@+id/scrollCategorias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etBuscador" android:layout_marginBottom="16dp"
-                android:scrollbars="none"> <LinearLayout
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp">
+
+                    <Button
+                        android:id="@+id/btnCatTodos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Todos"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="#A5D6A7"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="18dp"/>
+
+                    <Button
+                        android:id="@+id/btnCatFrutas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Frutas"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="#81C784"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="18dp"/>
+
+                    <Button
+                        android:id="@+id/btnCatLacteos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lácteos"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="#66BB6A"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="18dp"/>
+
+                    <Button
+                        android:id="@+id/btnCatBebidas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bebidas"
+                        android:backgroundTint="#43A047"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="18dp"/>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <!-- PRODUCTOS -->
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp">
-
-                <Button
-                    android:id="@+id/btnCatTodos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Todos"/>
-
-                <Button
-                    android:id="@+id/btnCatFrutas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Frutas"/>
-
-                <Button
-                    android:id="@+id/btnCatLacteos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Lácteos"/>
-
-                <Button
-                    android:id="@+id/btnCatBebidas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bebidas"/>
-
-            </LinearLayout>
-            </HorizontalScrollView>
+                android:text="Productos destacados"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="15dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProductos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="20dp"/>
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:paddingBottom="100dp"/>
 
         </LinearLayout>
+
     </ScrollView>
+
+    <!-- MENÚ INFERIOR -->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -98,6 +187,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
-        app:menu="@menu/navegador_inferior_menu" />
+        app:itemIconTint="#66BB6A"
+        app:itemTextColor="#66BB6A"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/navegador_inferior_menu"/>
 
 </RelativeLayout>
