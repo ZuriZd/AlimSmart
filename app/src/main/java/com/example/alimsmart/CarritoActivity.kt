@@ -1,146 +1,78 @@
 package com.example.alimsmart
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.ImageView
 
-/**
- * Aqui esta lo que controla el carrito
- * Esta pantalla maneja la lista de compras actual, calcula el precio total
- * y ejecuta el flujo de validación de pago antes de generar un pedido.
- */
 class CarritoActivity : AppCompatActivity() {
 
-    private lateinit var tvTotalCompra: TextView
-
-    // Declaramos el conector de la Base de Datos a nivel de clase para usarlo en las validaciones de las tarjetas
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var rvCarrito: RecyclerView
+    private lateinit var tvTotalPagar: TextView
+    private lateinit var btnFinalizarCompra: Button
+    private lateinit var tvVolver: ImageView // Nueva variable
+    private lateinit var productoAdapter: ProductoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_carrito)
+
         supportActionBar?.hide()
 
-        // Inicializamos el ayudante de la Base de Datos SQLite
-        dbHelper = DatabaseHelper(this)
+        rvCarrito = findViewById(R.id.rvCarrito)
+        tvTotalPagar = findViewById(R.id.tvTotalPagar)
+        btnFinalizarCompra = findViewById(R.id.btnFinalizarCompra)
+        tvVolver = findViewById(R.id.tvVolver) // Vinculamos el botón de volver
 
-        // Vinculación de los componentes del diseño XML
-        tvTotalCompra = findViewById(R.id.tvTotalPagar)
-        val btnFinalizarCompra = findViewById<Button>(R.id.btnFinalizarCompra)
-        val tvVolverCarrito = findViewById<TextView>(R.id.tvVolver)
+        val lista = CarritoManager.obtenerCarrito()
 
-        // Configuración del RecyclerView para mostrar los productos en el carrito
-        val recyclerView = findViewById<RecyclerView>(R.id.rvCarrito)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        rvCarrito.layoutManager = LinearLayoutManager(this)
 
-        // El adaptador recibe la lista actual y una función lambda para recalcular el total si borramos un artículo
-        val adaptadorCarrito = ProductoAdapter(CarritoManager.obtenerCarrito(), true) {
-            actualizarTotalUI()
+        // AQUÍ ESTÁ LA MAGIA: Le pasamos 'true' para decirle que sí es el carrito
+        productoAdapter = ProductoAdapter(lista, true){
+            // Este bloque se ejecuta SOLAMENTE cuando el usuario presiona "Quitar"
+            tvTotalPagar.text = "Total: $${CarritoManager.calcularTotal()}"
         }
-        recyclerView.adapter = adaptadorCarrito
+        rvCarrito.adapter = productoAdapter
 
-        // Renderizado inicial del precio total acumulado
-        actualizarTotalUI()
+        tvTotalPagar.text = "Total: $${CarritoManager.calcularTotal()}"
 
+        // Lógica para salir de la pantalla en cualquier momento
+        tvVolver.setOnClickListener {
+            finish()
+        }
 
         btnFinalizarCompra.setOnClickListener {
+
+            // 1. Validamos que el carrito no esté vacío
             if (CarritoManager.obtenerCarrito().isEmpty()) {
-                Toast.makeText(this, "Carrito vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (SessionManager.esInvitado) {
-                // ==========================================
-                // RUTA A: INVITADO (Directo a Efectivo)
-                // ==========================================
-                androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("Confirmar Pedido")
-                    .setMessage("Como invitado, tu pago será en EFECTIVO al recibir. ¿Confirmar?")
-                    .setPositiveButton("Sí, pedir") { _, _ ->
-                        // Descuento 0.0 porque es invitado
-                        procesarPedidoFinal(metodoElegido = "Efectivo", descuentoAplicado = 0.0)
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
-            } else {
+            // 2. Generamos un ID aleatorio de 5 dígitos (Ej: #48291)
+            val idRandom = "#${(10000..99999).random()}"
 
-                // RUTA B: USUARIO REGISTRADO
-                // 1. Mostrar menú de cupones
-                val opcionesCupon = CuponManager.listaCupones.map { it.nombre }.toMutableList()
-                opcionesCupon.add(0, "No usar cupón") // Agregamos opción vacía al inicio
+            // 3. Juntamos los nombres de los productos para la descripción del pedido
+            val resumenProductos = CarritoManager.obtenerCarrito().joinToString(", ") {
+                "${it.nombre} (x${it.cantidad})"
+            }
 
-                androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("¡Eres usuario VIP! Elige un cupón:")
-                    .setItems(opcionesCupon.toTypedArray()) { _, posicion ->
+            // 4. Creamos el pedido y lo guardamos en nuestro nuevo Manager global
+            val nuevoPedido = Pedido(idRandom, resumenProductos)
+            PedidoManager.listaPedidos.add(nuevoPedido)
 
-                        // Obtenemos el descuento dependiendo de su elección
-                        val descuento = if (posicion == 0) 0.0 else CuponManager.listaCupones[posicion - 1].descuento
+            // 5. Limpiamos el carrito temporal para que quede vacío de nuevo
+            CarritoManager.limpiarCarrito()
 
-                        // 2. Mostrar menú de métodos de pago
-                        val metodos = arrayOf("Efectivo (Al recibir)", "Tarjeta Guardada")
-                        androidx.appcompat.app.AlertDialog.Builder(this)
-                            .setTitle("Método de Pago")
-                            .setItems(metodos) { _, metodoPos ->
-                                if (metodoPos == 0) {
-                                    // Eligió Efectivo
-                                    procesarPedidoFinal("Efectivo", descuento)
-                                } else {
-                                    // Eligió Tarjeta -> Validamos en SQLite
-                                    val tarjetas = dbHelper.obtenerTarjetasUsuario(SessionManager.nombreUsuario!!)
-                                    if (tarjetas.isEmpty()) {
-                                        Toast.makeText(this, "No tienes tarjetas. Ve a Perfil.", Toast.LENGTH_LONG).show()
-                                        startActivity(Intent(this, PerfilActivity::class.java))
-                                    } else {
-                                        // Procesamos con la primera tarjeta registrada
-                                        procesarPedidoFinal("Tarjeta (${tarjetas[0]})", descuento)
-                                    }
-                                }
-                            }.show()
-                    }.show()
+            Toast.makeText(this, "¡Pedido $idRandom realizado!", Toast.LENGTH_LONG).show()
+
+            // 6. Cerramos la pantalla del carrito para regresar automáticamente
+            finish()
             }
         }
-
-        // Botón de escape para volver a la pantalla principal
-        tvVolverCarrito.setOnClickListener { finish() }
     }
-
-    /**
-     * MÉTODOS AUXILIARES DE LA CLASE
-     */
-    // Actualiza el componente de texto del precio en la interfaz gráfica
-    private fun actualizarTotalUI() {
-        val total = CarritoManager.calcularTotal()
-        tvTotalCompra.text = "Total: $$total"
-    }
-
-    /**
-     * Logica central
-     * Esta función automatiza los pasos repetitivos de la compra una vez que
-     * el metodo de pago ha sido aprobado por los filtros anteriores.
-     */
-    private fun procesarPedidoFinal(metodoElegido: String, descuentoAplicado: Double) {
-        val idRandom = "#${(10000..99999).random()}"
-
-        // Matemáticas del descuento
-        val totalOriginal = CarritoManager.calcularTotal()
-        val totalConDescuento = totalOriginal * (1.0 - descuentoAplicado)
-
-        // Construimos el resumen final
-        val resumen = CarritoManager.obtenerCarrito().joinToString(", ") {
-            "${it.nombre} (x${it.cantidad})"
-        } + "\n💳 Pago: $metodoElegido \n💰 Total Pagado: $$totalConDescuento"
-
-        val nuevoPedido = Pedido(idRandom, resumen)
-        PedidoManager.listaPedidos.add(nuevoPedido)
-
-        CarritoManager.limpiarCarrito()
-        Toast.makeText(this, "¡Pedido $idRandom realizado!", Toast.LENGTH_LONG).show()
-        finish()
-    }
-}

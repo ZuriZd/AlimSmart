@@ -17,7 +17,7 @@
         android:layout_marginBottom="12dp">
 
         <ImageView
-            android:id="@+id/btnBack"
+            android:id="@+id/tvVolver"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/outline_arrow_back_24"
