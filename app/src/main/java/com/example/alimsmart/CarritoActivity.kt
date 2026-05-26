@@ -48,6 +48,24 @@ class CarritoActivity : AppCompatActivity() {
 
         btnFinalizarCompra.setOnClickListener {
 
+            if (SessionManager.obtenerUsuario() == "Invitado") {
+
+                Toast.makeText(
+                    this,
+                    "Debes iniciar sesión para finalizar la compra",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else {
+
+                Toast.makeText(
+                    this,
+                    "Compra realizada correctamente",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+
             // 1. Validamos que el carrito no esté vacío
             if (CarritoManager.obtenerCarrito().isEmpty()) {
                 Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()

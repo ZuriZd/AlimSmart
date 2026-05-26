@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7FAF7">
+    android:background="@drawable/bg_login">
 
     <!-- CONTENIDO -->
 
@@ -187,11 +187,16 @@
         android:layout_height="64dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_nav_bg"
-        app:elevation="12dp"
         android:elevation="8dp"
+
+        app:menu="@menu/navegador_inferior_menu"
+
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/navegador_inferior_menu"/>
+
+        app:labelVisibilityMode="labeled"
+        app:itemIconSize="28dp"
+        app:itemPaddingTop="6dp"
+        app:itemPaddingBottom="6dp"/>
 
 </RelativeLayout>

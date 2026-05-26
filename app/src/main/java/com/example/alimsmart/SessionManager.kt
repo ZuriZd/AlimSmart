@@ -1,6 +1,7 @@
 package com.example.alimsmart
 
 object SessionManager {
+
     // Variables para guardar los datos del usuario conectado
     var nombreUsuario: String? = null
     var correoUsuario: String? = null
@@ -10,6 +11,15 @@ object SessionManager {
         nombreUsuario = nombre
         correoUsuario = correo
     }
+
+    // MODO INVITADO
+    fun iniciarSesionInvitado() {
+        nombreUsuario = "Invitado"
+        correoUsuario = "invitado@alimsmart.com"
+    }
+
+    val esInvitado: Boolean
+        get() = nombreUsuario == "Invitado"
 
     //Funcion que obtiene el nombre de usuario
     fun obtenerUsuario(): String {

@@ -101,7 +101,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Botón -->
+        <!-- Botón INICIO SESION-->
 
         <Button
         android:id="@+id/btnLogin"
@@ -116,6 +116,19 @@
         android:letterSpacing="0.05"
         android:layout_marginTop="30dp"
         app:cornerRadius="20dp"/>
+
+        <!-- Botón INVITADO-->
+
+        <Button
+            android:id="@+id/btnInvitado"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="0.5dp"
+            android:text="Continuar como invitado"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:backgroundTint="#E8F5E9"/>
 
         <!-- Registro -->
 

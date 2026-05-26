@@ -58,7 +58,12 @@ class ProductoAdapter(
         if (esCarrito) {
             // Lógica para modo Carrito: El botón se transforma en "Quitar"
             holder.btnAgregarCarrito.text = "Quitar"
-            holder.btnAgregarCarrito.setBackgroundColor(android.graphics.Color.parseColor("#E53935"))
+            holder.btnAgregarCarrito.setBackgroundColor(
+                android.graphics.Color.parseColor("#A5D6A7")
+            )
+            holder.btnAgregarCarrito.setTextColor(
+                android.graphics.Color.parseColor("#1B5E20")
+            )
 
             holder.btnAgregarCarrito.setOnClickListener {
                 CarritoManager.eliminarProducto(producto)
