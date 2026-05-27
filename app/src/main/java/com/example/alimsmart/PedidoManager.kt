@@ -7,7 +7,9 @@ package com.example.alimsmart
 data class Pedido(
     val id: String,               // Genera un numero al azar para los pedidos
     val descripcion: String,      // Resumen formateado en cadena de los productos y cantidades compradas
-    var recibido: Boolean = false // Estado lógico del paquete en el proceso de entrega física
+    var recibido: Boolean = false, // Estado lógico del paquete en el proceso de entrega física
+    val metodoPago: String = "",
+    val ultimosDigitos: String = ""
 )
 
 /**

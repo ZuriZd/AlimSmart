@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
+import android.content.Intent
 
 class CarritoActivity : AppCompatActivity() {
 
@@ -16,6 +18,10 @@ class CarritoActivity : AppCompatActivity() {
     private lateinit var btnFinalizarCompra: Button
     private lateinit var tvVolver: ImageView // Nueva variable
     private lateinit var productoAdapter: ProductoAdapter
+    private lateinit var dbHelper: DatabaseHelper
+    private var esperandoTarjeta = false
+    private var idTemporal = ""
+    private var descuentoTemporal = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +33,14 @@ class CarritoActivity : AppCompatActivity() {
         tvTotalPagar = findViewById(R.id.tvTotalPagar)
         btnFinalizarCompra = findViewById(R.id.btnFinalizarCompra)
         tvVolver = findViewById(R.id.tvVolver) // Vinculamos el botón de volver
+        dbHelper = DatabaseHelper(this)
 
         val lista = CarritoManager.obtenerCarrito()
 
         rvCarrito.layoutManager = LinearLayoutManager(this)
 
         // AQUÍ ESTÁ LA MAGIA: Le pasamos 'true' para decirle que sí es el carrito
-        productoAdapter = ProductoAdapter(lista, true){
+        productoAdapter = ProductoAdapter(lista, true) {
             // Este bloque se ejecuta SOLAMENTE cuando el usuario presiona "Quitar"
             tvTotalPagar.text = "Total: $${CarritoManager.calcularTotal()}"
         }
@@ -48,49 +55,122 @@ class CarritoActivity : AppCompatActivity() {
 
         btnFinalizarCompra.setOnClickListener {
 
-            if (SessionManager.obtenerUsuario() == "Invitado") {
-
-                Toast.makeText(
-                    this,
-                    "Debes iniciar sesión para finalizar la compra",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            } else {
-
-                Toast.makeText(
-                    this,
-                    "Compra realizada correctamente",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            }
-
-            // 1. Validamos que el carrito no esté vacío
             if (CarritoManager.obtenerCarrito().isEmpty()) {
                 Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // 2. Generamos un ID aleatorio de 5 dígitos (Ej: #48291)
             val idRandom = "#${(10000..99999).random()}"
 
-            // 3. Juntamos los nombres de los productos para la descripción del pedido
-            val resumenProductos = CarritoManager.obtenerCarrito().joinToString(", ") {
-                "${it.nombre} (x${it.cantidad})"
+            // =========================
+            // CASO INVITADO
+            // =========================
+            if (SessionManager.obtenerUsuario() == "Invitado") {
+
+                AlertDialog.Builder(this)
+                    .setTitle("Confirmar pedido")
+                    .setMessage("Como invitado pagarás en EFECTIVO. ¿Confirmar?")
+                    .setPositiveButton("Sí") { _, _ ->
+
+                        procesarPedido(idRandom, "Efectivo", 0.0)
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
+
+                return@setOnClickListener
             }
 
-            // 4. Creamos el pedido y lo guardamos en nuestro nuevo Manager global
-            val nuevoPedido = Pedido(idRandom, resumenProductos)
-            PedidoManager.listaPedidos.add(nuevoPedido)
+            // =========================
+            // CASO USUARIO REGISTRADO
+            // =========================
 
-            // 5. Limpiamos el carrito temporal para que quede vacío de nuevo
-            CarritoManager.limpiarCarrito()
+            val opcionesCupon = CuponManager.listaCupones.map { it.nombre }.toMutableList()
+            opcionesCupon.add(0, "No usar cupón")
 
-            Toast.makeText(this, "¡Pedido $idRandom realizado!", Toast.LENGTH_LONG).show()
+            AlertDialog.Builder(this)
+                .setTitle("Elige un cupón")
+                .setItems(opcionesCupon.toTypedArray()) { _, pos ->
 
-            // 6. Cerramos la pantalla del carrito para regresar automáticamente
-            finish()
+                    val descuento = if (pos == 0) 0.0
+                    else CuponManager.listaCupones[pos - 1].descuento
+
+                    val metodos = arrayOf("Efectivo", "Tarjeta Guardada")
+
+                    AlertDialog.Builder(this)
+                        .setTitle("Método de pago")
+                        .setItems(metodos) { _, metodo ->
+
+                            if (metodo == 0) {
+
+                                procesarPedido(idRandom, "Efectivo", descuento)
+
+                            } else {
+
+                                val tarjetas =
+                                    dbHelper.obtenerTarjetasUsuario(SessionManager.nombreUsuario!!)
+
+                                if (tarjetas.isEmpty()) {
+
+                                    esperandoTarjeta = true
+                                    idTemporal = idRandom
+                                    descuentoTemporal = descuento
+
+                                    Toast.makeText(this, "Registra una tarjeta para continuar", Toast.LENGTH_LONG).show()
+
+                                    startActivity(Intent(this, PerfilActivity::class.java))
+                                    return@setItems
+                                }
+
+                                procesarPedido(idRandom, "Tarjeta (${tarjetas[0]})", descuento)
+                            }
+                        }
+                        .show()
+                }
+                .show()
+        }
+
+    }
+
+    private fun procesarPedido(id: String, metodo: String, descuento: Double) {
+
+        val totalOriginal = CarritoManager.calcularTotal()
+        val totalFinal = totalOriginal * (1.0 - descuento)
+
+        val resumen = CarritoManager.obtenerCarrito()
+            .groupBy { it.nombre }
+            .map { (nombre, items) ->
+                val cantidadTotal = items.sumOf { it.cantidad }
+                "• $nombre (x$cantidadTotal)"
+            }
+            .joinToString("\n") + "\n\n💳 Pago: $metodo\n💰 Total: $totalFinal"
+
+        val pedido = Pedido(id, resumen)
+        PedidoManager.listaPedidos.add(pedido)
+
+        CarritoManager.limpiarCarrito()
+
+        Toast.makeText(this, "¡Pedido $id realizado!", Toast.LENGTH_LONG).show()
+
+        finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (esperandoTarjeta) {
+
+            val tarjetas = dbHelper.obtenerTarjetasUsuario(SessionManager.nombreUsuario!!)
+
+            if (tarjetas.isNotEmpty()) {
+
+                procesarPedido(
+                    idTemporal,
+                    "Tarjeta (${tarjetas[0].takeLast(4)})",
+                    descuentoTemporal
+                )
+
+                esperandoTarjeta = false
             }
         }
     }
+}

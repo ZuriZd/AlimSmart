@@ -120,7 +120,4 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return lista
     }
-
 }
-
-//Taco taco chimichanga!

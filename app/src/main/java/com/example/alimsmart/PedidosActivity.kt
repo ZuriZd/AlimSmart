@@ -38,32 +38,50 @@ class PedidosActivity : AppCompatActivity() {
                 // Instanciación del Contenedor Base (Estructura de Tarjeta / CardView)
                 val tarjetaPedido = LinearLayout(this).apply {
                     orientation = LinearLayout.VERTICAL
-                    setPadding(32, 32, 32, 32)
-                    setBackgroundColor(Color.WHITE)
+                    setPadding(60, 50, 60, 50)
 
-                    // Configuración de dimensiones y comportamiento de layouts en código puro
+                    // Fondo tipo tarjeta moderna
+                    setBackgroundResource(android.R.drawable.dialog_holo_light_frame)
+
+                    // Elevación (sombra)
+                    elevation = 12f
+
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     )
-                    params.setMargins(0, 0, 0, 32) // Agrega separación física vertical entre órdenes
+                    params.setMargins(30, 30, 30, 40)
                     layoutParams = params
                 }
 
                 // Muestra el número identificador único de la orden
                 val tvId = TextView(this).apply {
-                    text = "Orden: ${pedido.id}"
+                    text = "🧾 Orden ${pedido.id}"
                     textSize = 20f // Definición directa del tamaño en escala tipográfica SP mediante floats
-                    typeface = android.graphics.Typeface.DEFAULT_BOLD // Aplica estilo tipográfico de énfasis (Negrita)
                     setTextColor(Color.BLACK)
+                    setPadding(0, 0, 0, 20)
+                    setTypeface(typeface, android.graphics.Typeface.BOLD) // Aplica estilo tipográfico de énfasis (Negrita)
                 }
 
                 // Lista condensada de productos comprados
                 val tvProductos = TextView(this).apply {
                     text = pedido.descripcion
-                    textSize = 16f
-                    setTextColor(Color.GRAY)
-                    setPadding(0, 8, 0, 16)
+                    textSize = 15f
+                    setTextColor(Color.DKGRAY)
+                    setPadding(0, 0, 0, 25)
+                }
+
+                val tvPago = TextView(this).apply {
+
+                    text = if (pedido.metodoPago.contains("Tarjeta")) {
+                        "💳 Tarjeta ****${pedido.ultimosDigitos}"
+                    } else {
+                        "💵 ${pedido.metodoPago}"
+                    }
+
+                    textSize = 14f
+                    setTextColor(Color.parseColor("#2E7D32"))
+                    setPadding(0, 0, 0, 25)
                 }
 
                 // Componente de Interacción (Botón): Gestiona los estados de la logística de entrega
@@ -72,14 +90,17 @@ class PedidosActivity : AppCompatActivity() {
 
                     // Mapeo de Persistencia Visual: Adapta la estética del botón si la orden fue cobrada anteriormente
                     if (pedido.recibido) {
-                        text = "✓ Orden Recibida"
+                        text = "✓ Entregado"
                         isEnabled = false // Inhabilita interacciones repetitivas o redundantes
                         setBackgroundColor(Color.LTGRAY) // Aplica estilo visual gris inactivo
+                        setTextColor(Color.DKGRAY)
                     } else {
-                        text = "Marcar como Recibido"
+                        text = "Marcar como recibido"
                         setBackgroundColor(Color.parseColor("#2E7D32")) // Aplica el verde temático corporativo
                         setTextColor(Color.WHITE)
                     }
+
+                    setPadding(10, 10, 10, 10)
 
                     // Evento Click para componentes generados dinámicamente por código
                     setOnClickListener {
@@ -99,6 +120,4 @@ class PedidosActivity : AppCompatActivity() {
             }
         }
     }
-} //Hola soy Asa y me gusta el spaghetti mm que rico me voy a hacer uno al ratito. Compro
-// Maruchan de bolsa y utilizo la pasta ya que me gusta la textura de este. Despues lo baño
-//de una crema/salsa de chipotle que hago con leche condensada, chipotle enlatado, crema y caldo de pollo
+}
